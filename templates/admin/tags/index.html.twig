@@ -1,0 +1,49 @@
+{% extends 'base_content.html.twig' %}
+
+{% block title %}Управление Тегами{% endblock %}
+
+{% block content_row_class %}{{ parent() }} p-4{% endblock %}
+{% block content_col_class %}p-0{% endblock %}
+
+{% block content %}
+<h1>Управление Тегами</h1>
+
+{% include'admin/partial/top_filter.twig' %}
+
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>Тег</th>
+        <th>Символьный код</th>
+        <th>Статей</th>
+        <th>Статьи</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    {% for tag in pagination %}
+        <tr>
+            <td>{{ tag.name }}</td>
+            <td>{{ tag.slug }} {% if tag.deletedAt %} DELETED {% endif %}</td>
+            <td>{{ tag.articles|length }}</td>
+            <td>
+                <ul>
+                    {% for article in tag.articles %}
+                        <li>
+                            <a href="{{ path('app_article', { slug: article.slug }) }}">
+                                {{ article.title }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </td>
+        </tr>
+    {% else %}
+        <tr>
+            <td colspan="4">Нет тегов</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{{ knp_pagination_render(pagination) }}
+{% endblock %}

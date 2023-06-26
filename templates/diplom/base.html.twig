@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ru">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+  <title>{% block title %}Title{% endblock %}</title>
+
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="vendor/fontawesome-free/css/all.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700,300italic,400italic,700italic" rel="stylesheet" type="text/css">
+
+  <link href="css/app.min.css" rel="stylesheet">
+  {% block stylesheets %}{% endblock %}
+
+</head>
+
+<body class="signin-body">
+
+  <div class="container">
+    <div class="row">
+
+    {% if is_granted('ROLE_PREVIOUS_ADMIN') %}
+        <div class="alert alert-warning">
+            Имперсонализация включена. <a href="{{ path('app_homepage', { '_switch_user': '_exit' }) }}">Выйти</a>
+        </div>
+    {% endif %}
+
+    {% if app.session.flashBag.peek('flash_message')|length > 0 %}
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <div class="alert alert-success" role="alert">
+                        {% for message in app.flashes('flash_message') %}
+                            {{ message }}
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+
+    {% block body %}{% endblock %}
+
+    </div>
+  </div>
+
+  <script src="vendor/jquery/jquery.min.js"></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  {% block javascripts %}{% endblock %}
+
+</body>
+</html>
