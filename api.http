@@ -1,0 +1,40 @@
+GET {{host}}/api/v1/user
+Accept: application/json
+Authorization: Bearer {{token}}
+###
+
+GET {{host}}/api/v1/user
+Accept: application/json
+Authorization: Bearer blabla
+
+###
+GET {{host}}/api/v1/article_content
+Accept: application/json
+Authorization: Bearer {{token1}}
+
+{ "paragraphs" : 2, "word": "hello", "wordsCount": 3 }
+
+###
+GET {{host}}/api/v1/article_content
+Accept: application/json
+Authorization: Bearer {{token2}}
+
+{ "paragraphs" : 1 }
+
+###
+GET {{host}}/api/v1/article_content
+Accept: application/json
+Authorization: Bearer {{token3}}
+
+{ "paragraphs" : 5, "word": "Excellent", "wordsCount": 100 }
+###
+
+GET {{host}}/api/v1/article_content
+Accept: application/json
+Authorization: Bearer {{token}}
+
+###
+
+GET {{host}}/api/v1/article/1
+Accept: application/json
+Authorization: Bearer {{token}}

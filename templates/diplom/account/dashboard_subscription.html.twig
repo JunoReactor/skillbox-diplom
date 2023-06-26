@@ -1,0 +1,126 @@
+{% extends 'diplom/account/base.html.twig' %}
+
+{% block body %}
+
+  
+        <h1 class="mt-4">Подписка</h1>
+        <div class="row">
+          
+          <div class="col-xl-8">
+
+
+            {% if app.session.flashBag.peek('flash_message')|length > 0 %}
+              <div class="alert alert-success" role="alert">
+                {% for message in app.flashes('flash_message') %}
+                  {{ message }}
+                {% endfor %}
+              </div>
+            {% endif %}
+
+
+            <section class="pricing py-2 row">
+              <div class="container">
+                <div class="row">
+                  <div class="col-lg-4">
+                    <div class="card mb-5 mb-lg-0">
+                      <div class="card-body">
+
+                        {% if subscription == 'Free' %}
+                          <h5 class="card-title text-uppercase text-center current text-warning"><i class="fas fa-check"></i> Free</h5>
+                        {% else %}
+                          <h5 class="card-title text-muted text-uppercase text-center">Free</h5>
+                        {% endif %}
+
+                        <h6 class="card-price text-center">$0<span class="period">/неделя</span></h6>
+                        <hr>
+                        <ul class="fa-ul">
+                          <li><span class="fa-li"><i class="fas fa-check"></i></span>Возможность создать более 1 статьи</li>
+                          <li><span class="fa-li"><i class="fas fa-check"></i></span>Базовые возможности генератора</li>
+                          <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Продвинутые возможности генератора</li>
+                          <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Свои модули</li>
+                        </ul>
+
+                        {% if subscription == 'Free' or subscription == '' %}
+                          <a href="#" class="btn btn-block btn-secondary text-uppercase" disabled>Текущий уровень</a>
+                        {% endif %}
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="card mb-5 mb-lg-0">
+                      <div class="card-body">
+
+                        {% if subscription == 'Plus' %}
+                            <h5 class="card-title text-uppercase text-center current text-warning"><i class="fas fa-check"></i> Plus</h5>
+                        {% else %}
+                           <h5 class="card-title text-muted text-uppercase text-center">Plus</h5>
+                        {% endif %}
+
+                        <h6 class="card-price text-center">$9<span class="period">/неделя</span></h6>
+                        <hr>
+                        <ul class="fa-ul">
+                          <li><span class="fa-li"><i class="fas fa-check"></i></span>Возможность создать более 1 статьи</li>
+                          <li><span class="fa-li"><i class="fas fa-check"></i></span>Базовые возможности генератора</li>
+                          <li><span class="fa-li"><i class="fas fa-check"></i></span>Продвинутые возможности генератора</li>
+                          <li class="text-muted"><span class="fa-li"><i class="fas fa-times"></i></span>Свои модули</li>
+                        </ul>
+
+                        {% if subscription == 'Plus' %}
+                            <a href="#" class="btn btn-block btn-secondary text-uppercase" disabled>Текущий уровень</a>
+                        {% endif %}
+
+                        {% if subscription == 'Pro' %}
+
+                        {% endif %}
+
+                        {% if subscription == 'Free' or subscription == '' %}
+                          <a href="?get=Plus" class="btn btn-block btn-primary text-uppercase">Оформить</a>
+                        {% endif %}
+
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4">
+                    <div class="card">
+                      <div class="card-body">
+
+                        {% if subscription == 'Pro' %}
+                          <h5 class="card-title text-uppercase text-center current text-warning"><i class="fas fa-check"></i> Pro</h5>
+                        {% else %}
+                          <h5 class="card-title text-muted text-uppercase text-center">Pro</h5>
+                        {% endif %}
+
+                        <h6 class="card-price text-center">$49<span class="period">/неделя</span></h6>
+                        <hr>
+                        <ul class="fa-ul">
+                          <li><span class="fa-li"><i class="fas fa-check"></i></span><strong>Безлимитная генерация статей для вашего аккаунта</strong></li>
+                          <li><span class="fa-li"><i class="fas fa-check"></i></span>Базовые возможности генератора</li>
+                          <li><span class="fa-li"><i class="fas fa-check"></i></span>Продвинутые возможности генератора</li>
+                          <li><span class="fa-li"><i class="fas fa-check"></i></span>Свои модули</li>
+                        </ul>
+
+                        {% if subscription == 'Plus' %}
+                          <a href="?get=Pro" class="btn btn-block btn-primary text-uppercase">Оформить</a>
+                        {% endif %}
+
+                        {% if subscription == 'Pro' %}
+                          <a href="#" class="btn btn-block btn-secondary text-uppercase" disabled>Текущий уровень</a>
+                        {% endif %}
+
+                        {% if subscription == 'Free' or subscription == '' %}
+                          <a href="?get=Pro" class="btn btn-block btn-primary text-uppercase">Оформить</a>
+                        {% endif %}
+
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+        </div>
+        
+
+{% endblock %}

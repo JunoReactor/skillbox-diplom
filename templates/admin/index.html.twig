@@ -1,0 +1,17 @@
+{% extends 'base_content.html.twig' %}
+
+{% block content_row_class %}{{ parent() }} p-4{% endblock %}
+{% block content_col_class %}p-0{% endblock %}
+
+{% block content %}
+    <h1>Административный раздел</h1>
+    <div>
+        <ul>
+            <li><a href="{{ path('app_admin_comments') }}">Комментарии</a></li>
+            <li><a href="{{ path('app_admin_articles_create') }}">Саздать статью</a></li>
+            <li><a href="{{ path('app_admin_articles') }}">Статьи</a></li>
+            <li><a href="{{ path('app_admin_tags') }}">Теги</a></li>
+        </ul>
+    </div>
+{% endblock %}
+

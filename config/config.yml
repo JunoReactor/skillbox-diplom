@@ -1,0 +1,18 @@
+# app/config/config.yml
+
+liip_imagine:
+  loaders:
+    profile_photos:
+      flysystem:
+        filesystem_service: oneup_flysystem.profile_photos_filesystem
+  data_loader: profile_photos
+
+oneup_flysystem:
+  adapters:
+    profile_photos:
+      local:
+        location:  "%kernel.project_dir%/public/uploads/i/"
+
+  filesystems:
+    profile_photos:
+      adapter: profile_photos

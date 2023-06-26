@@ -1,0 +1,48 @@
+{% extends 'diplom/account/base.html.twig' %}
+
+{% block body %}
+ 
+        <h1 class="mt-4">Рабочий стол</h1>
+        <div class="row">
+          <div class="col-xl-8 border-right">
+            <div class="alert alert-warning" role="alert">
+              Подписка истекает через 2 дня
+            </div>
+            <div class="card-columns dashboard">
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{ articles }}</h5>
+                  <p class="card-text">Всего статей создано.</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">{{ textModules }}</h5>
+                  <p class="card-text">Создано в этом месяце.</p>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">PLUS</h5>
+                  <p class="card-text">Ваш уровень подписки.</p>
+                  <a href="{{ path('app_account_dashboard_subscription') }}" class="btn btn-primary">Улучшить</a>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Создать статью</h5>
+                  <a href="{{ path('app_account_dashboard_create_article') }}" class="btn btn-primary">Создать</a>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-body">
+                  <h5 class="card-title">Почему квадрат не круглый?</h5>
+                  <p class="card-text">При генерации контента <b>круг</b> статьи, вы можете наполнить его нужными словами <b>круг</b> для вашего бизнеса. Столько <b>круг</b> сколько <b>круг</b> нужно. Хоть все ими <b>круг</b> <b>круг</b> <b>круг</b> заполоните!.</p>
+                  <a href="{{ path('app_account_dashboard_modules') }}" class="btn btn-primary">Подробнее</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+{% endblock %}

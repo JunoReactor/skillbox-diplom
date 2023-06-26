@@ -1,0 +1,95 @@
+{% extends 'base_content.html.twig' %}
+
+{% block title %}{{ article.title }} - {{ parent() }}{% endblock %}
+
+{% block head %}
+{{ parent() }}
+{% if article.keywords %}
+    <meta name="keywords" content="{{ article.keywords }}" />
+{% endif %}
+{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+
+    <link rel="stylesheet" href="{{ asset('css/detail.css') }}">
+{% endblock %}
+
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <script type="text/javascript" src="{{ asset('js/vote.js') }}"></script>
+{% endblock %}
+
+{% block content_row_class %}{{ parent() }} no-gutters featured-border{% endblock %}
+{% block content_col_class %}article-detail{% endblock %}
+
+{% block content %}
+<div class="col-sm-12 p-2">
+    <div class="media d-flex align-content-center">
+        <img class="article-detail-image align-self-start mr-3 rounded" src="{{ asset(article.imagePath) }}">
+        <div class="media-body d-inline-block align-self-center">
+            <h1 class="mb-2">{{ article.title }}</h1>
+            <div class="d-flex mb-2">
+                <div class="text-muted align-self-center">
+                    <img class="article-author-img rounded-circle mr-2" src="{{ article.author.avatarUrl(40) }}">
+                    {{ article.author.firstName }}
+                </div>
+                <div class="text-muted align-self-center ml-4"><i class="fas fa-clock size-is-"></i> {{ article.publishedAt|ago }}</div>
+            </div>
+            {% if article.tags|length %}
+            <div class="mb-2 d-flex">
+                {% include 'partial/article_tags.html.twig' with { tags: article.tags } %}
+            </div>
+            {% endif %}
+            <div class="mb-2">
+                <div class="text-muted align-self-center article-detail-arrows" data-id="voteBlock">
+                    <span data-id="voteCount" class="{% if article.voteCount > 0 %}text-success{% elseif article.voteCount < 0 %}text-danger{% endif %}">{{ article.voteCount }}</span>
+                    <button data-id="voteButton" data-href="{{ path('app_article_vote', { slug: article.slug, type: 'up'}) }}" class="btn btn-success ml-3"><i class="fas fa-arrow-up"></i></button>
+                    <button data-id="voteButton" data-href="{{ path('app_article_vote', { slug: article.slug, type: 'down'}) }}" class="btn btn-danger"><i class="fas fa-arrow-down"></i></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-12 mt-2 mb-4">
+    {{ article.body|cached_markdown }}
+</div>
+
+
+<div class="col-sm-12 mb-4">
+    <h3><i class="pr-3 far fa-comment text-secondary"></i>{{ article.comments|length }} Комментария</h3>
+    <hr>
+
+    <div class="row mb-4">
+        <div class="col-sm-12">
+            <div class="comment-container align-self-start col-sm-6">
+                <div class="form-group">
+                    <textarea class="form-control" rows="2"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary">Комментировать</button>
+            </div>
+        </div>
+    </div>
+    
+    {% for comment in article.comments %}
+    <div class="row mt-2">
+        <div class="col-sm-12">
+            <div class="media">
+                <img class="align-self-start comment-img rounded-circle" src="{{ asset('images/profile.png') }}">
+                <div class="media-body align-self-start col-sm-6">
+                    <b>{{ comment.authorName }}</b>
+                    <small>{{ comment.createdAt|ago }}</small>
+                    <br>
+                    <span class="comment">{{ comment.content }}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+
+</div>
+{% endblock %}
