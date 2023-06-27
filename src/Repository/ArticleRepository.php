@@ -31,10 +31,13 @@ class ArticleRepository extends ServiceEntityRepository
             ->leftJoin('a.tags', 't')
             ->addSelect('t')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
+    /**
+     * Возвращает колечество статей общее
+     * @return int
+     */
     public function getCountFull(): int
     {
         return $this->createQueryBuilder('u')
@@ -43,6 +46,10 @@ class ArticleRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    /**
+     * Возвращает колечество статей за месяц
+     * @return int
+     */
     public function getCountMonth(): int
     {
         $now = new \DateTime();

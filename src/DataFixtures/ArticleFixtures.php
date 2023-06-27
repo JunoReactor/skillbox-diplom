@@ -6,8 +6,8 @@ use App\Entity\Article;
 use App\Entity\Comment;
 use App\Entity\Tag;
 use App\Entity\User;
-use App\Homework\ArticleContentProviderInterface;
-use App\Homework\CommentContentProvider;
+use App\Service\ArticleContentProviderInterface;
+use App\Service\CommentContentProvider;
 use Doctrine\Common\DataFixtures\DependentFixtureInterface;
 use Doctrine\Common\Persistence\ObjectManager;
 
