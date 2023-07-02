@@ -25,21 +25,11 @@ class Kernel extends BaseKernel
         }
     }
 
-    /**
-     * Функция
-     * @return string получает адрес текущей директории
-     */
     public function getProjectDir(): string
     {
         return \dirname(__DIR__);
     }
 
-    /**
-     * Функция
-     * @param ContainerBuilder $container
-     * @param LoaderInterface $loader
-     * @return void
-     */
     protected function configureContainer(ContainerBuilder $container, LoaderInterface $loader): void
     {
         $container->addResource(new FileResource($this->getProjectDir().'/config/bundles.php'));

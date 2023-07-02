@@ -32,20 +32,12 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
         $this->apiLogger = $apiLogger;
     }
 
-    /**
-     * Функция supports
-     * @param Request $request
-     */
     public function supports(Request $request)
     {
         return $request->headers->has('Authorization')
             && 0 === strpos($request->headers->get('Authorization'), 'Bearer ');
     }
 
-    /**
-     * Функция реквизиты для входа
-     * @param Request $request
-     */
     public function getCredentials(Request $request)
     {
         $token = substr($request->headers->get('Authorization'), 7);
@@ -55,10 +47,6 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
         return $token;
     }
 
-    /**
-     * Функция получение пользователя
-     * @param UserProviderInterface $userProvider
-     */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $token = $this->apiTokenRepository->findOneBy(['token' => $credentials]);
@@ -80,20 +68,11 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
         return $user;
     }
 
-    /**
-     * Функция проверки реквизиты для входа
-     * @param UserInterface $user
-     */
     public function checkCredentials($credentials, UserInterface $user)
     {
         return true;
     }
 
-    /**
-     * Функция не удочный вход
-     * @param Request $request
-     * @param AuthenticationException $exception
-     */
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception)
     {
         return new JsonResponse([
@@ -101,12 +80,6 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
         ], 401);
     }
 
-    /**
-     * Функция удочный вход
-     * @param Request $request
-     * @param TokenInterface $token
-     * @param string $providerKey
-     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         $this->apiLogger->info('Авторизация по токену', [
@@ -117,19 +90,11 @@ class ApiTokenAuthenticator extends AbstractGuardAuthenticator
         ]);
     }
 
-    /**
-     * Функция старт
-     * @param Request $request
-     * @param AuthenticationException $authException = null
-     */
     public function start(Request $request, AuthenticationException $authException = null)
     {
         throw new Exception('Never called');
     }
 
-    /**
-     * Функция Запомнить меня
-     */
     public function supportsRememberMe()
     {
         return false;

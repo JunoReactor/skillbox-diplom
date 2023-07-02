@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service;
+namespace App\Homework;
 
 use Faker\Factory;
 
@@ -16,12 +16,6 @@ class CommentContentProvider
         $this->pasteWords = $pasteWords;
     }
 
-    /**
-     * Функция
-     * @param string $word слово
-     * @param int $wordsCount количество слов
-     * @return string итоговый текст
-     */
     public function get(string $word = null, int $wordsCount = 0): string
     {
         $faker = Factory::create();

@@ -1,17 +1,10 @@
 <?php
 
-namespace App\Service;
+namespace App\Homework;
 
 
 class PasteWords
 {
-
-    /**
-     * Функция вставки стова в текст
-     * @param string $text текст
-     * @param string $word слово
-     * @return string $text
-     */
     public function paste(string $text, string $word, int $wordsCount = 1): string
     {
         $words = explode(' ', $text);

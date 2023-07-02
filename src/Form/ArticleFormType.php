@@ -43,6 +43,11 @@ class ArticleFormType extends AbstractType
             ->add('publishedAt', null, [
                 'widget' => 'single_text',
             ])
+           /* ->add('image',FileType::class, [
+                'label' => 'Изображение',
+                'mapped' => false,
+                'constraints' => '',
+            ])*/
             ->add('author', EntityType::class, [
                 'class'         => User::class,
                 'choice_label'  => function(User $user) {
@@ -50,7 +55,18 @@ class ArticleFormType extends AbstractType
                 },
                 'placeholder' => 'Выберите автора статьи',
                 'choices' => $this->userRepository->findAllSortedByName(),
-            ]);
+            ])
+            /*
+            ->add('slug')
+            
+            
+            ->add('voteCount')
+            ->add('imageFilename')
+            
+            ->add('updatedAt')
+            ->add('tags')
+            ->add('author')*/
+        ;
 
         $builder->get('body')
                 ->addModelTransformer(new CallbackTransformer(

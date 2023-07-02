@@ -3,23 +3,23 @@
 namespace App\Controller;
 
 use App\Entity\ApiToken;
-use App\Entity\Article;
 use App\Entity\TextModule;
 use App\Entity\User;
+use App\Entity\Article;
+use App\Form\ArticleFormType;
 use App\Repository\ArticleRepository;
 use App\Repository\TextModuleRepository;
-use App\Service\ArticleContentProvider;
+use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\ORM\EntityManagerInterface;
-use Faker\Factory;
 use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
-
+use Faker\Factory;
+use Faker\Generator;
 
 /**
  * @IsGranted("IS_AUTHENTICATED_FULLY")
@@ -30,25 +30,17 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/dashboard", name="app_account_dashboard")
      */
-    public function dashboard(ArticleRepository $articleRepository, TextModuleRepository $textModuleRepository)
+    public function dashboard()
     {
-
-        return $this->render('diplom/account/dashboard.html.twig', [
-            'articles' => $articleRepository->getCountFull(),
-            'textModules' => $articleRepository->getCountMonth()
-        ]);
+        return $this->render('diplom/account/dashboard.html.twig', []);
     }
 
     /**
      * @Route("/account/dashboard/subscription", name="app_account_dashboard_subscription")
      */
-    public function dashboard_subscription(Request $request, EntityManagerInterface $em)
+    public function dashboard_subscription()
     {
-        $subscription = $this->subscription($request, $em);
-        //dd($subscription);
-        return $this->render('diplom/account/dashboard_subscription.html.twig', [
-            'subscription' => $subscription
-        ]);
+        return $this->render('diplom/account/dashboard_subscription.html.twig', []);
     }
 
     /**
@@ -193,7 +185,7 @@ class AccountController extends AbstractController
             //$articleRepository->latest(),
             $articleRepository->findAllWithSearchQuery($request->query->get('q'), $request->query->has('showDeleted')),
             $request->query->getInt('page', 1),
-            $request->query->getInt('limit', 5)
+            $request->query->getInt('limit', 20)
         );
 
         return $this->render('diplom/account/dashboard_history.html.twig', [
@@ -202,73 +194,14 @@ class AccountController extends AbstractController
     }
 
     /**
-     * @Route("/account/dashboard/article/detail/{id}", name="app_account_dashboard_article_detail")
-     */
-    public function dashboard_article_detail(Article $article)
-    {
-
-        return $this->render('diplom/account/dashboard_article_detail.html.twig', [
-            'article' => $article,
-        ]);
-    }
-
-    /**
      * @Route("/account/dashboard/create_article", name="app_account_dashboard_create_article")
      */
-    public function dashboard_create_article(EntityManagerInterface $em, Request $request, ArticleContentProvider $articleContentProvider)
+    public function dashboard_create_article(EntityManagerInterface $em, Request $request)
     {
 
-        if(count($request->request) ==  11)
+        if(count($request->request) ==  12)
         {
-
-
-            $faker = Factory::create();
-
-            //dd($faker->paragraph());
-
-            $articleSizeFrom = $request->request->get('articleSizeFrom');
-            $articleSizeTo = $request->request->get('articleSizeTo');
-            $word1Field = $request->request->get('word1Field');
-            $word1Field = $request->request->get('word1Field');
-
-            $text = $faker->realText(
-                $faker->numberBetween(
-                    intval($request->request->get('articleSizeFrom')),
-                    intval($request->request->get('articleSizeTo'))
-                )
-            );
-
-           // dd($file);
-
-            $article = new Article();
-            $article->setTitle($request->request->get('articleTitle'));
-            $article->setAuthor($this->getUser());
-            $article->setKeywords(
-                $request->request->get('article0Word').','.
-                $request->request->get('article1Word').','.
-                $request->request->get('article2Word')
-            );
-
-            $articleContent = $articleContentProvider->get(
-                $text,
-                $request->request->get('word1Field'),
-                $request->request->get('word1CountField')
-            );
-
-            $articleContent = $articleContentProvider->get(
-                $articleContent,
-                $request->request->get('word2Field'),
-                $request->request->get('word2CountField')
-            );
-
-            $uploadImg = $this->uploadFile($request->files->get('uploadImg'));
-            $article->setImageFilename($uploadImg);
-            $article->setDescription($request->request->get('fieldTheme'));
-
-            $article->setBody($articleContent);
-            $em->persist($article);
-            $em->flush();
-            $this->addFlash('flash_message', 'Статья добавлена');
+            dd($request->request);
         }
 
        /*   "fieldTheme" => "-"
@@ -284,85 +217,46 @@ class AccountController extends AbstractController
             "word2CountField" => "33"
             "img" => ""*/
 
+        $faker = Factory::create();
+
+        //dd($faker->paragraph());
+
+        $articleSizeFrom = $request->request->get('articleSizeFrom');
+        $articleSizeTo = $request->request->get('articleSizeTo');
+        $word1Field = $request->request->get('word1Field');
+        $word1Field = $request->request->get('word1Field');
+
+        dd($faker->realText($faker->numberBetween(0, 30)));
+
+        $form = $this->createForm(ArticleFormType::class);
+        $form->handleRequest($request);
+        if($form->isSubmitted() && $form->isValid()){
+            /** Article $article */
+            $article = $form->getData();
+            /*$article
+                ->setAuthor($this->getUser())
+                ->setPublishedAt(new \DateTime())
+            ;*/
+
+            $em->persist($article);
+            $em->flush();  
+
+            $this->addFlash('flash_message','Статья добавлена');
+            return $this->redirectToRoute('app_account_dashboard_create_article');      
+        }
 
         return $this->render('diplom/account/dashboard_create_article.html.twig', [
            // 'articleForm' => $form->createView(),
-            'articleTextData' => '',
+            'articleTextData' => $form->createView(),
         ]);
     }
 
-    public function uploadFile(?File $file)
+    /**
+     * @Route("/account/dashboard/article_detail", name="app_account_dashboard_article_detail")
+     */
+    public function dashboard_article_detail()
     {
-
-        if ($file === null) {
-           // die('file null');
-            return false;
-        }
-
-        $fileName = md5(uniqid()) . '.' . $file->guessExtension();
-
-        $file->move(
-            dirname(dirname(__DIR__)) . '/public/uploads/i/',
-            $fileName
-        );
-        return '/public/uploads/i/'.$fileName;
-    }
-
-    private function subscription(Request $request, EntityManagerInterface $em)
-    {
-        $user = $this->getUser();
-        $date = new \DateTime('@'.strtotime('now'));
-        $subscriptionDate = $user->getSubscriptionDate();
-        $dateInAWeek = new \DateTime("+1 week");
-
-        if($subscriptionDate != null):
-            if($subscriptionDate >= $dateInAWeek)
-            {
-                $user->setSubscription('Free');
-                $user->setSubscriptionDate(null);
-                $user->setIsActive(0);
-                $em->persist($user);
-                $em->flush();
-            }
-        endif;
-
-        if($user->getSubscription() == '')
-        {
-
-            $user->setSubscription('Free');
-            $user->setSubscriptionDate(null);
-            $user->setIsActive(0);
-            $em->persist($user);
-            $em->flush();
-        }
-
-        if($request->query->get('get') == 'Pro')
-        {
-            //dd();
-            //return $this->redirectToRoute('app_account_dashboard_subscription');
-
-            $user->setSubscription('Pro');
-            $user->setSubscriptionDate($date);
-            $user->setIsActive(1);
-            $em->persist($user);
-            $em->flush();
-            $this->addFlash('flash_message', 'Подписка Pro оформлена, до '.$dateInAWeek->format('Y-m-d'));
-           // return $this->redirect($request->getPathInfo());
-        }
-
-        if($request->query->get('get') == 'Plus')
-        {
-            $user->setSubscription('Plus');
-            $user->setSubscriptionDate($date);
-            $user->setIsActive(1);
-            $em->persist($user);
-            $em->flush();
-            $this->addFlash('flash_message', 'Подписка Plus оформлена, до '.$dateInAWeek->format('Y-m-d'));
-            //return $this->redirect($request->getPathInfo());
-        }
-
-        //dd($request->query->get('get'));
-        return $user->getSubscription();
+        return $this->render('diplom/account/dashboard_article_detail.html.twig', []);
     }
 
 }

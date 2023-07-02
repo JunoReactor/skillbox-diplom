@@ -59,16 +59,6 @@ class User implements UserInterface
      */
     private $articles;
 
-    /**
-     * @ORM\Column(type="string", length=10)
-     */
-    private $subscription;
-
-    /**
-     * @ORM\Column(type="date", nullable=true)
-     */
-    private $subscription_date;
-
     public function __construct()
     {
         $this->apiTokens = new ArrayCollection();
@@ -247,30 +237,6 @@ class User implements UserInterface
                 $article->setAuthor(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getSubscription(): ?string
-    {
-        return $this->subscription;
-    }
-
-    public function setSubscription(string $subscription): self
-    {
-        $this->subscription = $subscription;
-
-        return $this;
-    }
-
-    public function getSubscriptionDate(): ?\DateTimeInterface
-    {
-        return $this->subscription_date;
-    }
-
-    public function setSubscriptionDate(?\DateTimeInterface $subscription_date): self
-    {
-        $this->subscription_date = $subscription_date;
 
         return $this;
     }

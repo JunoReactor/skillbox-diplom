@@ -31,34 +31,8 @@ class ArticleRepository extends ServiceEntityRepository
             ->leftJoin('a.tags', 't')
             ->addSelect('t')
             ->getQuery()
-            ->getResult();
-    }
-
-    /**
-     * Возвращает колечество статей общее
-     * @return int
-     */
-    public function getCountFull(): int
-    {
-        return $this->createQueryBuilder('u')
-            ->select('COUNT(u.id)')
-            ->getQuery()
-            ->getSingleScalarResult();
-    }
-
-    /**
-     * Возвращает колечество статей за месяц
-     * @return int
-     */
-    public function getCountMonth(): int
-    {
-        $now = new \DateTime();
-        return $this->createQueryBuilder('u')
-            ->select('COUNT(u.id)')
-            ->andWhere('MONTH(u.createdAt) = :month')
-            ->setParameter('month', $now->format('m'))
-            ->getQuery()
-            ->getSingleScalarResult();
+            ->getResult()
+        ;
     }
     
      /**

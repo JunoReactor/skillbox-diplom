@@ -39,20 +39,12 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         $this->passwordEncoder = $passwordEncoder;
     }
 
-    /**
-     * Функция supports
-     * @param Request $request
-     */
     public function supports(Request $request)
     {
         return self::LOGIN_ROUTE === $request->attributes->get('_route')
             && $request->isMethod('POST');
     }
 
-    /**
-     * Функция реквизиты для входа
-     * @param Request $request
-     */
     public function getCredentials(Request $request)
     {
         $credentials = [
@@ -68,12 +60,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         return $credentials;
     }
 
-    /**
-     * Функция получение пользователя
-     * @param UserProviderInterface $userProvider
-     * @param object $credentials
-     * @return object user
-     */
     public function getUser($credentials, UserProviderInterface $userProvider)
     {
         $token = new CsrfToken('authenticate', $credentials['csrf_token']);
@@ -94,11 +80,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         return $user;
     }
 
-    /**
-     * Функция проверка пользователя
-     * @param UserInterface $user
-     * @param object $credentials
-     */
     public function checkCredentials($credentials, UserInterface $user)
     {
         return $this->passwordEncoder->isPasswordValid($user, $credentials['password']);
@@ -112,12 +93,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         return $credentials['password'];
     }
 
-    /**
-     * Функция авторизация
-     * @param Request $request
-     * @param TokenInterface $token
-     * @param string $providerKey
-     */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, $providerKey)
     {
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
@@ -127,9 +102,6 @@ class LoginFormAuthenticator extends AbstractFormLoginAuthenticator implements P
         return new RedirectResponse($this->urlGenerator->generate('app_homepage'));
     }
 
-    /**
-     * функция получение URL логина
-     */
     protected function getLoginUrl()
     {
         return $this->urlGenerator->generate(self::LOGIN_ROUTE);

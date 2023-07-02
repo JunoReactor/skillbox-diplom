@@ -23,11 +23,6 @@ class MarkdownParser
         $this->cache = $cache;
     }
 
-    /**
-     * Функция порсинг строки
-     * @param string $source
-     * @return string
-     */
     public function parse(string $source): string 
     {
         return $this->cache->get(
