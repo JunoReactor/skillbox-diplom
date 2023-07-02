@@ -2,13 +2,12 @@
 
 namespace App\Controller\Api;
 
-use App\Homework\ArticleContentProviderInterface;
+use App\Service\ArticleContentProviderInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ArticleContentProviderController extends AbstractController
 {

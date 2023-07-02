@@ -35,6 +35,14 @@ class TextModuleRepository extends ServiceEntityRepository
         }
     }
 
+    public function getCount(): int
+    {
+        return $this->createQueryBuilder('u')
+            ->select('COUNT(u.id)')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     /**
      * @throws ORMException
      * @throws OptimisticLockException

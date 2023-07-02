@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Homework;
+namespace App\Service;
 
 
 interface ArticleContentProviderInterface
