@@ -22,7 +22,6 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Security\Core\Security;
 
-
 /**
  * @IsGranted("IS_AUTHENTICATED_FULLY")
  * @method User|null getUser()

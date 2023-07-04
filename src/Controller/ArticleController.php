@@ -27,7 +27,6 @@ class ArticleController extends AbstractController
         ]);
     }
 
-
     /**
      * @Route("/articles/article_content", name="app_article_content")
      */
@@ -53,7 +52,6 @@ class ArticleController extends AbstractController
             'article' => $article,
         ]);
     }
-
 
     /**
      * @Route("/try", name="app_article_try")

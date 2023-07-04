@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-
 use League\Flysystem\FilesystemInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;

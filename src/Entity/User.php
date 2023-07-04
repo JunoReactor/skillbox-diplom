@@ -19,55 +19,55 @@ class User implements UserInterface
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=180, unique=true)
      * @Groups("main")
      */
-    private $email;
+    private string $email;
 
     /**
      * @ORM\Column(type="json")
      */
-    private $roles = [];
+    private array $roles = [];
 
     /**
      * @var string The hashed password
      * @ORM\Column(type="string")
      */
-    private $password;
+    private string $password;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups("main")
      */
-    private $firstName;
+    private string $firstName;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isActive = true;
+    private bool $isActive = true;
 
     /**
      * @ORM\OneToMany(targetEntity=ApiToken::class, mappedBy="user")
      */
-    private $apiTokens;
+    private ArrayCollection $apiTokens;
 
     /**
      * @ORM\OneToMany(targetEntity=Article::class, mappedBy="author")
      */
-    private $articles;
+    private ArrayCollection $articles;
 
     /**
      * @ORM\Column(type="string", length=10)
      */
-    private $subscription;
+    private string $subscription;
 
     /**
      * @ORM\Column(type="date", nullable=true)
      */
-    private $subscription_date;
+    private \DateTimeInterface $subscription_date;
 
     public function __construct()
     {

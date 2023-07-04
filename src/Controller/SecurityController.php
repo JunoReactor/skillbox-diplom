@@ -48,7 +48,6 @@ class SecurityController extends AbstractController
         return null;
     }
 
-
     /**
      * @Route("/register", name="app_register")
      */

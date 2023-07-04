@@ -11,7 +11,7 @@ use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
 
-class UserDeactivateCommand extends Command
+class UserStatusCommand extends Command
 {
     protected static $defaultName = 'app:user:deactivate';
     /**
@@ -33,7 +33,10 @@ class UserDeactivateCommand extends Command
         $this->em = $em;
     }
 
-
+    /**
+     * Функция configure
+     * @return Void
+     */
     protected function configure()
     {
         $this
@@ -43,12 +46,18 @@ class UserDeactivateCommand extends Command
         ;
     }
 
+    /**
+     * Функция выполнение
+     * @param InputInterface $input userId параметр
+     * @param OutputInterface $output указываем номер пользователя
+     * @return int 0
+     */
     protected function execute(InputInterface $input, OutputInterface $output): int
     {
         $io = new SymfonyStyle($input, $output);
         $userId = $input->getArgument('userId');
 
-        if (! $userId) {
+        if (!$userId) {
             $io->error('Не указан id пользователя');
             return 1;
         }

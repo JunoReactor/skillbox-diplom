@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-
 use Demontpx\ParsedownBundle\Parsedown;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 

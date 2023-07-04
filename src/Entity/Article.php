@@ -21,67 +21,67 @@ class Article
      * @ORM\Column(type="integer")
      * @Groups("main")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("main")
      */
-    private $title;
+    private string $title;
 
     /**
      * @ORM\Column(type="string", length=100, unique=true)
      * @Gedmo\Slug(fields={"title"})
      * @Groups("main")
      */
-    private $slug;
+    private string $slug;
 
     /**
      * @ORM\Column(type="string", length=100)
      * @Groups("main")
      */
-    private $description;
+    private string $description;
 
     /**
      * @ORM\Column(type="text")
      * @Groups("main")
      */
-    private $body;
+    private string $body;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
      * @Groups("main")
      */
-    private $publishedAt;
+    private \DateTime $publishedAt;
 
     /**
      * @ORM\Column(type="string", length=255)
      * @Groups("main")
      */
-    private $keywords;
+    private string $keywords;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      * @Groups("main")
      */
-    private $voteCount;
+    private int $voteCount;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
      * @Groups("main")
      */
-    private $imageFilename;
+    private string $imageFilename;
 
     /**
      * @ORM\OneToMany(targetEntity=Comment::class, mappedBy="article", fetch="EXTRA_LAZY")
      * @ORM\OrderBy({"createdAt" = "DESC"})
      */
-    private $comments;
+    private ArrayCollection $comments;
 
     /**
      * @ORM\ManyToMany(targetEntity=Tag::class, inversedBy="articles")
      */
-    private $tags;
+    private ArrayCollection $tags;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="articles")

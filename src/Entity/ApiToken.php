@@ -11,28 +11,27 @@ use Doctrine\ORM\Mapping as ORM;
 class ApiToken
 {
     
-
     /**
      * @ORM\Id()
      * @ORM\GeneratedValue()
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $token;
+    private string $token;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $expiresAt;
+    private \DateTime $expiresAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="apiTokens", cascade={"persist"})
      */
-    private $user;
+    private User $user;
 
     /**
      * ApiToken constructor.
@@ -69,7 +68,6 @@ class ApiToken
     {
         return $this->getExpiresAt() <= new \DateTime();
     }
-
 
     public function setUser(?User $user): self
     {
