@@ -27,16 +27,33 @@ class TextModule
      */
     private string $Content;
 
+    /**
+     * Get the value of id
+     *
+     * @return  int
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Get the value of name
+     *
+     * @return  string
+     */
     public function getName(): ?string
     {
         return $this->name;
     }
 
+    /**
+     * Set the value of name
+     *
+     * @param  string  $name
+     *
+     * @return  self
+     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -44,11 +61,23 @@ class TextModule
         return $this;
     }
 
+    /**
+     * Get the value of Content
+     *
+     * @return  string
+     */
     public function getContent(): ?string
     {
         return $this->Content;
     }
 
+    /**
+     * Set the value of Content
+     *
+     * @param  string  $Content
+     *
+     * @return  self
+     */
     public function setContent(string $Content): self
     {
         $this->Content = $Content;

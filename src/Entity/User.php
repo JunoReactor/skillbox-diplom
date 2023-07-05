@@ -75,16 +75,32 @@ class User implements UserInterface
         $this->articles = new ArrayCollection();
     }
 
+    /**
+     * Get the user ID
+     *
+     * @return int|null
+     */
     public function getId(): ?int
     {
         return $this->id;
     }
 
+    /**
+     * Get the user email
+     *
+     * @return string|null
+     */
     public function getEmail(): ?string
     {
         return $this->email;
     }
 
+    /**
+     * Set the user email
+     *
+     * @param string $email
+     * @return $this
+     */
     public function setEmail(string $email): self
     {
         $this->email = $email;
@@ -93,7 +109,7 @@ class User implements UserInterface
     }
 
     /**
-     * A visual identifier that represents this user.
+     * Get the username which is the email address
      *
      * @see UserInterface
      */
@@ -103,6 +119,8 @@ class User implements UserInterface
     }
 
     /**
+     * Get the user roles
+     *
      * @see UserInterface
      */
     public function getRoles(): array
@@ -114,6 +132,12 @@ class User implements UserInterface
         return array_unique($roles);
     }
 
+    /**
+     * Set the user roles
+     *
+     * @param array $roles
+     * @return $this
+     */
     public function setRoles(array $roles): self
     {
         $this->roles = $roles;
@@ -122,6 +146,8 @@ class User implements UserInterface
     }
 
     /**
+     * Get the hashed password
+     *
      * @see UserInterface
      */
     public function getPassword(): string
@@ -129,6 +155,12 @@ class User implements UserInterface
         return (string) $this->password;
     }
 
+    /**
+     * Set the hashed password
+     *
+     * @param string $password
+     * @return $this
+     */
     public function setPassword(string $password): self
     {
         $this->password = $password;
@@ -136,6 +168,8 @@ class User implements UserInterface
     }
 
     /**
+     * Get the salt used to hash the password (not needed when using bcrypt)
+     *
      * @see UserInterface
      */
     public function getSalt()
@@ -144,6 +178,8 @@ class User implements UserInterface
     }
 
     /**
+     * Erase sensitive data on the user object
+     *
      * @see UserInterface
      */
     public function eraseCredentials()
@@ -152,11 +188,22 @@ class User implements UserInterface
         // $this->plainPassword = null;
     }
 
+    /**
+     * Get the user first name
+     *
+     * @return string|null
+     */
     public function getFirstName(): ?string
     {
         return $this->firstName;
     }
 
+    /**
+     * Set the user first name
+     *
+     * @param string|null $firstName
+     * @return $this
+     */
     public function setFirstName(?string $firstName): self
     {
         $this->firstName = $firstName;
@@ -164,11 +211,22 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * Check if the user is active or not
+     *
+     * @return bool|null
+     */
     public function getIsActive(): ?bool
     {
         return $this->isActive;
     }
 
+    /**
+     * Set whether the user is active or not
+     *
+     * @param bool $isActive
+     * @return $this
+     */
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
@@ -176,6 +234,12 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * Get the URL for the user avatar image based on their first name and Robohash API.
+     *
+     * @param string|null $size The size of the image in pixels. Optional.
+     * @return string The URL of the user avatar image.
+     */
     public function getAvatarUrl(string $size = null): string
     {
         $url = sprintf('https://robohash.org/%s.jpg?set=set3', mb_strtolower(str_replace(' ', '_', $this->firstName)));
@@ -189,6 +253,8 @@ class User implements UserInterface
     }
 
     /**
+     * Get all of the API tokens associated with this user.
+     *
      * @return Collection|ApiToken[]
      */
     public function getApiTokens(): Collection
@@ -196,6 +262,12 @@ class User implements UserInterface
         return $this->apiTokens;
     }
 
+    /**
+     * Add an API token to this user.
+     *
+     * @param ApiToken $apiToken The API token to add.
+     * @return self
+     */
     public function addApiToken(ApiToken $apiToken): self
     {
         if (!$this->apiTokens->contains($apiToken))
@@ -207,6 +279,12 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * Remove an API token from this user.
+     *
+     * @param ApiToken $apiToken The API token to remove.
+     * @return self
+     */
     public function removeApiToken(ApiToken $apiToken): self
     {
         if ($this->apiTokens->contains($apiToken)) {
@@ -221,6 +299,8 @@ class User implements UserInterface
     }
 
     /**
+     * Get all of the articles associated with this user.
+     *
      * @return Collection|Article[]
      */
     public function getArticles(): Collection
@@ -228,6 +308,12 @@ class User implements UserInterface
         return $this->articles;
     }
 
+    /**
+     * Add an article to this user's collection of articles.
+     *
+     * @param Article $article The article to add.
+     * @return self
+     */
     public function addArticle(Article $article): self
     {
         if (!$this->articles->contains($article)) {
@@ -238,6 +324,12 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * Remove an article from this user's collection of articles.
+     *
+     * @param Article $article The article to remove.
+     * @return self
+     */
     public function removeArticle(Article $article): self
     {
         if ($this->articles->contains($article)) {
@@ -251,11 +343,22 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * Get this user's subscription level.
+     *
+     * @return string|null The subscription level.
+     */
     public function getSubscription(): ?string
     {
         return $this->subscription;
     }
 
+    /**
+     * Set this user's subscription level.
+     *
+     * @param string|null The subscription level.
+     * @return self
+     */
     public function setSubscription(string $subscription): self
     {
         $this->subscription = $subscription;
@@ -263,11 +366,22 @@ class User implements UserInterface
         return $this;
     }
 
+    /**
+     * Get this user's subscription date.
+     *
+     *@return \DateTimeInterface|null The subscription date.
+     */
     public function getSubscriptionDate(): ?\DateTimeInterface
     {
         return $this->subscription_date;
     }
 
+    /**
+     * Set this user's subscription date.
+     *
+     *@param \DateTimeInterface|null The subscription date.
+     *@return self
+     */
     public function setSubscriptionDate(?\DateTimeInterface $subscription_date): self
     {
         $this->subscription_date = $subscription_date;
