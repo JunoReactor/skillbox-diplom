@@ -3,25 +3,22 @@
 namespace App\Service;
 
 use App\Entity\ApiToken;
-use App\Entity\Article;
-use App\Entity\TextModule;
 use App\Entity\User;
-use App\Repository\ArticleRepository;
-use App\Repository\TextModuleRepository;
-use App\Service\ArticleContentProvider;
 use Doctrine\ORM\EntityManagerInterface;
-use Faker\Factory;
-use Knp\Component\Pager\PaginatorInterface;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\Security;
 
 class Account
 {
+    /**
+     * Dashboard profile for user
+     *
+     * @param User $user
+     * @param Request $request
+     * @param EntityManagerInterface $em
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     * @return array
+     */
     public function dashboard_profile(User $user, Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
     {
         $apiToken = new ApiToken($user);

@@ -10,10 +10,28 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DashboardModulesService
 {
+    /**
+     * @var TextModuleRepository
+     */
     private $textModuleRepository;
+
+    /**
+     * @var EntityManagerInterface
+     */
     private $em;
+
+    /**
+     * @var PaginatorInterface
+     */
     private $paginator;
 
+    /**
+     * DashboardModulesService constructor.
+     *
+     * @param TextModuleRepository $textModuleRepository
+     * @param EntityManagerInterface $em
+     * @param PaginatorInterface $paginator
+     */
     public function __construct(TextModuleRepository $textModuleRepository, EntityManagerInterface $em, PaginatorInterface $paginator)
     {
         $this->textModuleRepository = $textModuleRepository;
@@ -21,7 +39,13 @@ class DashboardModulesService
         $this->paginator = $paginator;
     }
 
-    public function updateModules(Request $request)
+    /**
+     * Update text modules
+     *
+     * @param Request $request
+     * @return string|null
+     */
+    public function updateModules(Request $request): ?string
     {
         if(!empty($request->query->get('del')))
         {
@@ -48,7 +72,13 @@ class DashboardModulesService
         return null;
     }
 
-    public function getModules(Request $request)
+    /**
+     * Get text modules with pagination
+     *
+     * @param Request $request
+     * @return array
+     */
+    public function getModules(Request $request): array
     {
         $pagination = $this->paginator->paginate(
             $this->textModuleRepository->findAll(),

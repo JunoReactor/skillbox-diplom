@@ -11,6 +11,7 @@ use App\Repository\TextModuleRepository;
 use App\Service\Account;
 use App\Service\ArticleContentProvider;
 use App\Service\DashboardModulesService;
+use App\Service\SubscriptionService;
 use Doctrine\ORM\EntityManagerInterface;
 use Faker\Factory;
 use Knp\Component\Pager\PaginatorInterface;

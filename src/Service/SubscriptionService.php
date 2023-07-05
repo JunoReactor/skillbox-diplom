@@ -13,7 +13,11 @@ class SubscriptionService
     {
         $this->em = $em;
     }
-
+    /**
+     * handleSubscription
+     *
+     * @param Request $request
+     */
     public function handleSubscription(Request $request)
     {
         $user = $this->getUser();

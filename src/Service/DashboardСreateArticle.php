@@ -10,15 +10,25 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DashboardСreateArticle
 {
-    private $em;
-    private $articleContentProvider;
-
+    private EntityManagerInterface $em;
+    private ArticleContentProvider $articleContentProvider;
+    /**
+     * DashboardСreateArticle constructor.
+     *
+     * @param EntityManagerInterface $em
+     * @param ArticleContentProvider $articleContentProvider
+     */
     public function __construct(EntityManagerInterface $em, ArticleContentProvider $articleContentProvider)
     {
         $this->em = $em;
         $this->articleContentProvider = $articleContentProvider;
     }
-
+    /**
+     * Create new article
+     *
+     * @param Request $request
+     * @return string|null
+     */
     public function createArticle(Request $request)
     {
         if (count($request->request) == 11) {
@@ -70,7 +80,12 @@ class DashboardСreateArticle
 
         return null;
     }
-
+    /**
+     * Upload file
+     *
+     * @param File|null $file
+     * @return bool|string
+     */
     public function uploadFile(?File $file)
     {
         if ($file === null) {
