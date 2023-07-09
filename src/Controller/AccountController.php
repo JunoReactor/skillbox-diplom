@@ -44,7 +44,7 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/dashboard/subscription", name="app_account_dashboard_subscription")
      */
-    public function dashboard_subscription(Request $request, EntityManagerInterface $em, SubscriptionService $subscriptionService)
+    public function dashboardSubscription(Request $request, EntityManagerInterface $em, SubscriptionService $subscriptionService)
     {
         $this->subscriptionService->handleSubscription($request);
         return $this->render('diplom/account/dashboard_subscription.html.twig', [
@@ -55,7 +55,7 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/dashboard/profile", name="app_account_dashboard_profile")
      */
-    public function dashboard_profile(
+    public function dashboardProfile(
         Request $request,
         Account $account,
         EntityManagerInterface $em,
@@ -64,7 +64,7 @@ class AccountController extends AbstractController
     {
 
         $user = $this->getUser();
-        $data = $account->dashboard_profile($user, $request, $em, $passwordEncoder);
+        $data = $account->dashboardProfile($user, $request, $em, $passwordEncoder);
 
         if(!empty($data['API_token']))
         {
@@ -82,7 +82,7 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/dashboard/modules", name="app_account_dashboard_modules")
      */
-    public function dashboard_modules(Request $request, DashboardModulesService $dashboardModulesService)
+    public function dashboardModules(Request $request, DashboardModulesService $dashboardModulesService)
     {
         $flashMessage = $dashboardModulesService->updateModules($request);
         if ($flashMessage !== null) {
@@ -97,7 +97,7 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/dashboard/history", name="app_account_dashboard_history")
      */
-    public function dashboard_history(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator)
+    public function dashboardHistory(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator)
     {
         $pagination = $paginator->paginate(
             //$articleRepository->latest(),
@@ -114,7 +114,7 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/dashboard/article/detail/{id}", name="app_account_dashboard_article_detail")
      */
-    public function dashboard_article_detail(Article $article)
+    public function dashboardArticleDetail(Article $article)
     {
 
         return $this->render('diplom/account/dashboard_article_detail.html.twig', [
@@ -125,7 +125,7 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/dashboard/create_article", name="app_account_dashboard_create_article")
      */
-    public function dashboard_create_article(Request $request, DashboardModulesService $articleService)
+    public function dashboardCreateArticle(Request $request, DashboardModulesService $articleService)
     {
         if ($message = $articleService->createArticle($request))
         {
