@@ -4,12 +4,42 @@ namespace App\Service;
 
 use App\Entity\ApiToken;
 use App\Entity\User;
+use App\Repository\ArticleRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Pagination\Paginator;
+use Knp\Component\Pager\Pagination\PaginationInterface;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class Account
 {
+    private $em;
+    private $passwordEncoder;
+    private $articleRepository;
+    private $paginator;
+
+    public function __construct(EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder, ArticleRepository $articleRepository, PaginatorInterface $paginator)
+    {
+        $this->em                 = $em;
+        $this->passwordEncoder    = $passwordEncoder;
+        $this->articleRepository  = $articleRepository;
+        $this->paginator          = $paginator;
+    }
+
+    /**
+     * Dashboard
+     *
+     * @return array
+     */
+    public function dashboardIndex()
+    {
+        return [
+            'articles' => $this->articleRepository->getCountFull(),
+            'textModules' => $this->articleRepository->getCountMonth()
+        ];
+    }
+
     /**
      * Dashboard profile for user
      *
@@ -19,7 +49,7 @@ class Account
      * @param UserPasswordEncoderInterface $passwordEncoder
      * @return array
      */
-    public function dashboard_profile(User $user, Request $request, EntityManagerInterface $em, UserPasswordEncoderInterface $passwordEncoder)
+    public function dashboardProfile(User $user, Request $request )
     {
         $apiToken = new ApiToken($user);
 
@@ -29,9 +59,9 @@ class Account
             $token = md5(time());
             $user->addApiToken($apiToken);
 
-            $em->persist($apiToken);
-            $em->persist($user);
-            $em->flush();
+            $this->em->persist($apiToken);
+            $this->em->persist($user);
+            $this->em->flush();
         }
 
         $inputName              = $request->request->get('inputName');
@@ -43,10 +73,10 @@ class Account
         {
             $user->setFirstName($inputName);
             $user->setEmail($inputEmail);
-            $user->setPassword($passwordEncoder->encodePassword($user,$inputPassword));
+            $user->setPassword($this->passwordEncoder->encodePassword($user,$inputPassword));
 
-            $em->persist($user);
-            $em->flush();
+            $this->em->persist($user);
+            $this->em->flush();
         }
 
         return [
@@ -54,6 +84,23 @@ class Account
             'name'          => $user->getFirstName(),
             'email'         => $user->getEmail(),
         ];
+    }
+
+    /**
+     * Dashboard
+     *
+     * @param Request $request
+     * @return PaginationInterface
+     */
+    public function dashboardHistory($request)
+    {
+        $pagination = $this->paginator->paginate(
+        //$articleRepository->latest(),
+            $this->articleRepository->findAllWithSearchQuery($request->query->get('q'), $request->query->has('showDeleted')),
+            $request->query->getInt('page', 1),
+            $request->query->getInt('limit', 5)
+        );
+        return $pagination;
     }
 
 }

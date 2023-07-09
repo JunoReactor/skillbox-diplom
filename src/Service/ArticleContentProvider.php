@@ -9,7 +9,6 @@ class ArticleContentProvider
      */
     private $pasteWords;
 
-
     public function __construct(PasteWords $pasteWords)
     {
         $this->pasteWords = $pasteWords;

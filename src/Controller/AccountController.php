@@ -6,22 +6,15 @@ use App\Entity\ApiToken;
 use App\Entity\Article;
 use App\Entity\TextModule;
 use App\Entity\User;
-use App\Repository\ArticleRepository;
-use App\Repository\TextModuleRepository;
 use App\Service\Account;
-use App\Service\ArticleContentProvider;
 use App\Service\DashboardModulesService;
 use App\Service\SubscriptionService;
-use Doctrine\ORM\EntityManagerInterface;
-use Faker\Factory;
 use Knp\Component\Pager\PaginatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
-use Symfony\Component\Security\Core\Security;
+
 
 /**
  * @IsGranted("IS_AUTHENTICATED_FULLY")
@@ -32,21 +25,21 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/dashboard", name="app_account_dashboard")
      */
-    public function dashboard(ArticleRepository $articleRepository, TextModuleRepository $textModuleRepository)
+    public function dashboard(Account $account)
     {
-
+        $data = $account->dashboardIndex();
         return $this->render('diplom/account/dashboard.html.twig', [
-            'articles' => $articleRepository->getCountFull(),
-            'textModules' => $articleRepository->getCountMonth()
+            'articles'      => $data['articles'],
+            'textModules'   => $data['textModules']
         ]);
     }
 
     /**
      * @Route("/account/dashboard/subscription", name="app_account_dashboard_subscription")
      */
-    public function dashboardSubscription(Request $request, EntityManagerInterface $em, SubscriptionService $subscriptionService)
+    public function dashboardSubscription(Request $request, SubscriptionService $subscriptionService)
     {
-        $this->subscriptionService->handleSubscription($request);
+        $subscription = $subscriptionService->handleSubscription($request);
         return $this->render('diplom/account/dashboard_subscription.html.twig', [
             'subscription' => $subscription
         ]);
@@ -55,17 +48,10 @@ class AccountController extends AbstractController
     /**
      * @Route("/account/dashboard/profile", name="app_account_dashboard_profile")
      */
-    public function dashboardProfile(
-        Request $request,
-        Account $account,
-        EntityManagerInterface $em,
-        UserPasswordEncoderInterface $passwordEncoder
-    )
+    public function dashboardProfile(Request $request, Account $account)
     {
-
         $user = $this->getUser();
-        $data = $account->dashboardProfile($user, $request, $em, $passwordEncoder);
-
+        $data = $account->dashboardProfile($user, $request);
         if(!empty($data['API_token']))
         {
             $this->addFlash('flash_message', 'API токен успешно изменен');
@@ -74,9 +60,7 @@ class AccountController extends AbstractController
         {
             $this->addFlash('flash_message', 'Профиль успешно изменен');
         }
-
         return $this->render('diplom/account/dashboard_profile.html.twig', $data);
-
     }
 
     /**
@@ -88,24 +72,16 @@ class AccountController extends AbstractController
         if ($flashMessage !== null) {
             $this->addFlash('flash_message', $flashMessage);
         }
-
         $data = $dashboardModulesService->getModules($request);
-
         return $this->render('diplom/account/dashboard_modules.html.twig', $data);
     }
 
     /**
      * @Route("/account/dashboard/history", name="app_account_dashboard_history")
      */
-    public function dashboardHistory(ArticleRepository $articleRepository, Request $request, PaginatorInterface $paginator)
+    public function dashboardHistory(Request $request, Account $account)
     {
-        $pagination = $paginator->paginate(
-            //$articleRepository->latest(),
-            $articleRepository->findAllWithSearchQuery($request->query->get('q'), $request->query->has('showDeleted')),
-            $request->query->getInt('page', 1),
-            $request->query->getInt('limit', 5)
-        );
-
+        $pagination = $account->dashboardHistory($request);
         return $this->render('diplom/account/dashboard_history.html.twig', [
             'pagination' => $pagination,
         ]);
@@ -116,7 +92,6 @@ class AccountController extends AbstractController
      */
     public function dashboardArticleDetail(Article $article)
     {
-
         return $this->render('diplom/account/dashboard_article_detail.html.twig', [
             'article' => $article,
         ]);
@@ -131,7 +106,6 @@ class AccountController extends AbstractController
         {
             $this->addFlash('flash_message', $message);
         }
-
         return $this->render('diplom/account/dashboard_create_article.html.twig', [
             'articleTextData' => '',
         ]);
