@@ -9,17 +9,29 @@ use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UserFixtures extends BaseFixtures
 {
-
+    /**
+     * @var UserPasswordEncoderInterface
+     */
     private $passwordEncoder;
 
+    /**
+     * UserFixtures constructor.
+     *
+     * @param UserPasswordEncoderInterface $passwordEncoder
+     */
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
     {
         $this->passwordEncoder = $passwordEncoder;
     }
 
+    /**
+     * Load data fixtures with the passed EntityManager
+     *
+     * @param ObjectManager $manager
+     */
     public function loadData(ObjectManager $manager)
     {
-
+        // Create an admin user
         $this->create(User::class, function (User $user) use ($manager) {
             $user
                 ->setEmail('admin@symfony.skillbox')
@@ -30,7 +42,8 @@ class UserFixtures extends BaseFixtures
 
             $manager->persist(new ApiToken($user));
         });
-        
+
+        // Create an API user
         $this->create(User::class, function (User $user) use ($manager) {
             $user
                 ->setEmail('api@symfony.skillbox')
@@ -43,7 +56,8 @@ class UserFixtures extends BaseFixtures
             $manager->persist(new ApiToken($user));
             $manager->persist(new ApiToken($user));
         });
-    
+
+        // Create 10 random users
         $this->createMany(User::class, 10, function (User $user) use ($manager) {
             $user
                 ->setEmail($this->faker->email)

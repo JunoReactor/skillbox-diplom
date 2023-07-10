@@ -5,6 +5,11 @@ namespace App\DataFixtures;
 use App\Entity\Tag;
 use Doctrine\Persistence\ObjectManager;
 
+/**
+ * Load data fixtures with the passed EntityManager
+ *
+ * @param ObjectManager $manager
+ */
 class TagFixtures extends BaseFixtures
 {
     public function loadData(ObjectManager $manager)

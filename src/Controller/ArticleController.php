@@ -2,11 +2,10 @@
 
 namespace App\Controller;
 
-
 use App\Entity\Article;
-use App\Homework\ArticleContentProviderInterface;
 use App\Repository\ArticleRepository;
 use App\Repository\CommentRepository;
+use App\Service\ArticleContentProviderInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -26,7 +25,6 @@ class ArticleController extends AbstractController
             'comments' => $comments,
         ]);
     }
-
 
     /**
      * @Route("/articles/article_content", name="app_article_content")
@@ -53,7 +51,6 @@ class ArticleController extends AbstractController
             'article' => $article,
         ]);
     }
-
 
     /**
      * @Route("/try", name="app_article_try")

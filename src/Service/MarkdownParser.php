@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-
 use Demontpx\ParsedownBundle\Parsedown;
 use Symfony\Component\Cache\Adapter\AdapterInterface;
 
@@ -23,6 +22,11 @@ class MarkdownParser
         $this->cache = $cache;
     }
 
+    /**
+     * Функция порсинг строки
+     * @param string $source
+     * @return string
+     */
     public function parse(string $source): string 
     {
         return $this->cache->get(

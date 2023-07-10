@@ -1,3 +1,4 @@
+Копировать
 <?php
 
 namespace App\Repository;
@@ -7,23 +8,24 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Common\Persistence\ManagerRegistry;
 use Doctrine\ORM\QueryBuilder;
 
-/**
- * @method Article|null find($id, $lockMode = null, $lockVersion = null)
- * @method Article|null findOneBy(array $criteria, array $orderBy = null)
- * @method Article[]    findAll()
- * @method Article[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class ArticleRepository extends ServiceEntityRepository
 {
+    /**
+     * ArticleRepository constructor.
+     *
+     * @param ManagerRegistry $registry
+     */
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Article::class);
     }
 
-     /**
-      * @return Article[] Returns an array of Article objects
-      */
-    public function findLatestPublished()
+    /**
+     * Find latest published articles with comments and tags
+     *
+     * @return Article[]
+     */
+    public function findLatestPublished(): array
     {
         return $this->published($this->latest())
             ->leftJoin('a.comments', 'c')
@@ -31,10 +33,14 @@ class ArticleRepository extends ServiceEntityRepository
             ->leftJoin('a.tags', 't')
             ->addSelect('t')
             ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
+    /**
+     * Get count of all articles
+     *
+     * @return int
+     */
     public function getCountFull(): int
     {
         return $this->createQueryBuilder('u')
@@ -43,6 +49,11 @@ class ArticleRepository extends ServiceEntityRepository
             ->getSingleScalarResult();
     }
 
+    /**
+     * Get count of articles for current month
+     *
+     * @return int
+     */
     public function getCountMonth(): int
     {
         $now = new \DateTime();
@@ -53,79 +64,86 @@ class ArticleRepository extends ServiceEntityRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
-    
-     /**
-      * @return Article[] Returns an array of Article objects
-      */
-    public function findLatest()
+
+    /**
+     * Find latest articles
+     *
+     * @return Article[]
+     */
+    public function findLatest(): array
     {
         return $this->latest()
             ->getQuery()
-            ->getResult()
-        ;
-    }
-    
-     /**
-      * @return Article[] Returns an array of Article objects
-      */
-    public function findPublished()
-    {
-        return $this->published()            
-            ->getQuery()
-            ->getResult()
-        ;
+            ->getResult();
     }
 
-    /*
-    public function findOneBySomeField($value): ?Article
+    /**
+     * Find published articles
+     *
+     * @return Article[]
+     */
+    public function findPublished(): array
     {
-        return $this->createQueryBuilder('a')
-            ->andWhere('a.exampleField = :val')
-            ->setParameter('val', $value)
+        return $this->published()
             ->getQuery()
-            ->getOneOrNullResult()
-        ;
+            ->getResult();
     }
-    */
 
-    public function findAllWithSearchQuery(?string $search, bool $withSoftDeletes = false)
+    /**
+     * Find all articles with search query
+     *
+     * @param string|null $search
+     * @param bool $withSoftDeletes
+     * @return QueryBuilder
+     */
+    public function findAllWithSearchQuery(?string $search, bool $withSoftDeletes = false): QueryBuilder
     {
         $qb = $this->createQueryBuilder('c');
-        # При введенном значении в поле фильтр, фильтрация должна осуществляться по названию, содержимому или автору статьи.
-        
+
         $qb
             ->innerJoin('c.author', 'a')
-            ->addSelect('a')
-        ;
-        
+            ->addSelect('a');
+
         if ($search) {
             $qb
                 ->andWhere('c.body LIKE :search OR c.title LIKE :search OR a.firstName LIKE :search ')
-                ->setParameter('search', '%' . $search . '%')
-            ;
+                ->setParameter('search', '%' . $search . '%');
         }
-        
+
         if ($withSoftDeletes) {
             $this->getEntityManager()->getFilters()->disable('softdeleteable');
         }
-        //dd('111');
+
         return $qb
-            ->orderBy('c.publishedAt', 'DESC')
-        ;
+            ->orderBy('c.publishedAt', 'DESC');
     }
-    
-    private function published(QueryBuilder $qb = null)
+
+    /**
+     * Set published filter to query builder
+     *
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
+    private function published(QueryBuilder $qb = null): QueryBuilder
     {
         return $this->getOrCreateQueryBuilder($qb)->andWhere('a.publishedAt IS NOT NULL');
     }
-    
-    public function latest(QueryBuilder $qb = null)
+
+    /**
+     * Set latest order to query builder
+     *
+     * @param QueryBuilder|null $qb
+     * @return QueryBuilder
+     */
+    public function latest(QueryBuilder $qb = null): QueryBuilder
     {
         return $this->getOrCreateQueryBuilder($qb)->orderBy('a.publishedAt', 'DESC');
     }
 
     /**
-     * @param QueryBuilder $qb
+     * Get or create query builder object for repository
+     *
+     * @param QueryBuilder|null $qb
      * @return QueryBuilder
      */
     private function getOrCreateQueryBuilder(QueryBuilder $qb = null): QueryBuilder

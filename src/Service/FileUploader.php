@@ -2,7 +2,6 @@
 
 namespace App\Service;
 
-
 use League\Flysystem\FilesystemInterface;
 use Symfony\Component\HttpFoundation\File\File;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
@@ -25,6 +24,12 @@ class FileUploader
         $this->filesystem = $articlesFilesystem;
     }
 
+    /**
+     * Функция
+     * @param File $file файл
+     * @param string $oldFileName старый файл
+     * @return string ссылка на файл
+     */
     public function uploadFile(File $file, ?string $oldFileName = null): string
     {
         $fileName = $this->slugger

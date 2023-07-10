@@ -22,4 +22,4 @@ doctrine:
                 enabled: true
         dql:
             string_functions:
-                MONTHcd: DoctrineExtensions\Query\Mysql\Month
+                MONTH: DoctrineExtensions\Query\Mysql\Month
