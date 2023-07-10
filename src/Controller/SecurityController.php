@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Security\LoginFormAuthenticator;
+use App\Service\RegistrationService;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -16,70 +17,33 @@ use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationExc
 class SecurityController extends AbstractController
 {
     /**
-     * @Route("/login", name="app_login")
-     */
-    public function login(AuthenticationUtils $authenticationUtils): Response
-    {
-
-        $error = $authenticationUtils->getLastAuthenticationError();
-        $lastUsername = $authenticationUtils->getLastUsername();
-
-        return $this->render('diplom/security/login.html.twig', ['last_username' => $lastUsername, 'error' => $error]);
-    }
-
-    /**
-     * @Route("/logout", name="app_logout")
-     */
-    public function logout()
-    {
-        throw new \LogicException(
-            'This method can be blank - it will be intercepted by the logout key on your firewall.'
-        );
-    }
-
-    public function checkPass(Request $request)
-    {
-        if($request->request->get('password') != $request->request->get('confirmPassword'))
-        {
-            throw new CustomUserMessageAuthenticationException(
-                'Пароли не совпадают'
-            );
-        }
-        return null;
-    }
-
-    /**
      * @Route("/register", name="app_register")
      */
     public function register(
         Request $request,
-        UserPasswordEncoderInterface $passwordEncoder,
         GuardAuthenticatorHandler $guard,
-        LoginFormAuthenticator $authenticator
+        LoginFormAuthenticator $authenticator,
+        RegistrationService $registrationService
     ) {
 
         $error = '';
 
         if ($request->isMethod('POST')) {
 
-            $error = $this->checkPass($request);
+            try {
+                $user = $registrationService->register($request);
+            } catch (CustomUserMessageAuthenticationException $e) {
+                $error = $e->getMessage();
+            }
 
-            $user = new User();
-            $user
-                ->setEmail($request->request->get('email'))
-                ->setFirstName($request->request->get('firstName'))
-                ->setPassword($passwordEncoder->encodePassword($user, $request->request->get('password')));
-
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($user);
-            $em->flush();
-
-            return $guard->authenticateUserAndHandleSuccess(
-                $user,
-                $request,
-                $authenticator,
-                'main'
-            );
+            if(empty($error)) {
+                return $guard->authenticateUserAndHandleSuccess(
+                    $user,
+                    $request,
+                    $authenticator,
+                    'main'
+                );
+            }
         }
 
         return $this->render(

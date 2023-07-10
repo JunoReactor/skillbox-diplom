@@ -22,7 +22,6 @@ class UserStatusCommand extends Command
      * @var EntityManagerInterface
      */
     private $em;
-
     /**
      * UserDeactivateCommand constructor.
      */
